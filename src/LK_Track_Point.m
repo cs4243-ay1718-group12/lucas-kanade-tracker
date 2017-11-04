@@ -41,12 +41,12 @@ function [u, v] = LK_Track_Point(img1, img2, win_size, x, y)
             for j = y - wind_rad : y + win_rad
                 I_t = img1(x,y) - img2(x+d_current(1)+d(1), y+d_current(2)+d(2));
                 b = b + [I_t*W_x(x,y);I_t*W_y(x,y)];
-                guess = Z\b;
-                d_current = d_currebt + guess;
-                if (abs(guess) < accuracy_threshold)
-                    break;
-                end
             end
+        end
+        guess = Z\b;
+        d_current = d_current + guess;
+        if (abs(guess) < accuracy_threshold)
+            break;
         end
     end
     d = d_current;
