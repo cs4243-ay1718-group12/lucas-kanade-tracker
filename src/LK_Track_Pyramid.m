@@ -15,9 +15,8 @@ function [x_new, y_new] = LK_Track_Pyramid(img1, img2, x, y, max_level, win_size
         level_num_cols_1 = size(pyramid_img1,2)/(2^(max_level - level));
         level_num_rows_2 = size(pyramid_img2,1)/(2^(max_level - level));
         level_num_cols_2 = size(pyramid_img2,2)/(2^(max_level - level));
-        level_img1 = pyramid_img1(1:level_num_rows_1, 1:level_num_cols_1, max_level - level + 1);
-        level_img2 = pyramid_img2(1:level_num_rows_2, 1:level_num_cols_2, max_level - level + 1);
-        % Init guess velocity
+        level_img1 = pyramid_img1(1:level_num_rows_1, 1:level_num_cols_1, max_level-level+1);
+        level_img2 = pyramid_img2(1:level_num_rows_2, 1:level_num_cols_2, max_level-level+1);
         % Location of original (x,y) on this level
         level_x = x/2^(max_level-level);
         level_y = y/2^(max_level-level);
