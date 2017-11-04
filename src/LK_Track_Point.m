@@ -1,8 +1,8 @@
 % Return the best-guess velocity of point (x,y) on img1 to img2
 % To be used in a pyramid implementation
-function [u, v] = LK_Track_Point(img1, img2, win_size, x, y)
+function [dx, dy] = LK_Track_Point(img1, img2, x, y, win_size)
     % Constants
-    d = [0 0];
+    d = [0;0];
     win_rad = floor(win_size/2);
     max_steps = 20;
     num_cols = size(img1,2);
@@ -34,7 +34,7 @@ function [u, v] = LK_Track_Point(img1, img2, win_size, x, y)
     % Iterative improvement of estimation
     % Either run for max_steps times or until error residual smaller than
     % accuracy_threshold
-    d_current = [0 0];
+    d_current = [0;0];
     for step = 1 : max_steps
         b = [0;0];
         for i = x - win_rad : x + win_rad
@@ -50,6 +50,6 @@ function [u, v] = LK_Track_Point(img1, img2, win_size, x, y)
         end
     end
     d = d_current;
-    u = d(1);
-    v = d(2);
+    dx = d(1);
+    dy = d(2);
 end
