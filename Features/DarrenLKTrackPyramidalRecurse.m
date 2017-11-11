@@ -9,6 +9,6 @@ function [dx, dy] = DarrenLKTrackPyramidalRecurse(im1, im2, x, y, max_levels, w)
     
     [dx, dy] = DarrenLKTrack(im1, im2, x, y, w);
     
-    dx = dx + dx_2*2;
-    dy = dy + dy_2*2;
+    dx = dx + dx_2;
+    dy = dy + dy_2;
 end
