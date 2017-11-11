@@ -38,13 +38,15 @@ function [dx, dy] = LK_Track_Point(img1, img2, x, y, win_size)
     for step = 1 : max_steps
         b = [0;0];
         for i = x - win_rad : x + win_rad
-            for j = y - wind_rad : y + win_rad
-                I_t = img1(x,y) - img2(x+d_current(1)+d(1), y+d_current(2)+d(2));
-                b = b + [I_t*W_x(x,y);I_t*W_y(x,y)];
+            for j = y - win_rad : y + win_rad
+                if (not(i < 0 || j < 0 || i > num_rows || j > num_cols) &&  not(i+d_current(1)+d(1)< 0 || j+d_current(2)+d(2) < 0 || i+d_current(1)+d(1) > num_rows || j+d_current(2)+d(2) > num_cols))
+                    I_t = img1(i,j) - img2(i + d_current(1) + d(1), j + d_current(2) + d(2));
+                    b = b + [I_t*W_x(i,j);I_t*W_y(i,j)];;
+                end
             end
         end
         guess = Z\b;
-        d_current = d_current + guess;
+        d_current = round(d_current + guess);
         if (abs(guess) < accuracy_threshold)
             break;
         end

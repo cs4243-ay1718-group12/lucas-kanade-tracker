@@ -44,22 +44,19 @@ xCentroid = round(mean(X2));
 yCentroid = round(mean(Y2));
 plot(xCentroid,yCentroid,'r*');
 
-
-
-
-% % Uncomment with your code for LKTracker 
-% for p = 2:imgNum
-% 		[X2(:,p) Y2(:,p)] = LKTrackPyr(imgseq(:,:,p-1),imgseq(:,:,p),...
-% 			X2(:,p-1),Y2(:,p-1));
-% 	end
-% 
-% figure % show the points
-% for p = 1:imgNum
-%     imshow(imgseq(:,:,p)),hold on
-%     X2p = X2(:,p); Y2p = Y2(:,p);
-%     h = plot(X2p,Y2p,'go');
-%     pause;
-%  X2pl = X2p; Y2pl = Y2p;
-% end
+for p = 2:imgNum
+    [velo_x, velo_y] = LK_Track_Pyramid(imgseq(:,:,p-1),imgseq(:,:,p),X2(:,p-1),Y2(:,p-1),3,12);
+    X2(:,p) = X2(:,p-1) + velo_x; 
+    Y2(:,p) = Y2(:,p-1) + velo_y; 
+end
+ 
+figure
+for p = 1:imgNum
+    imshow(imgseq(:,:,p)),hold on
+    X2p = X2(:,p); Y2p = Y2(:,p);
+    h = plot(X2p,Y2p,'go');
+    pause;
+    X2pl = X2p; Y2pl = Y2p;
+end
 
  
