@@ -1,4 +1,4 @@
-function [ X2 Y2 ] = LKTrackPyr( img1, img2, X1, Y1 )
+function [ X2 Y2 ] = LK_Track_Pyramid_Iterative( img1, img2, X1, Y1 )
 % [ X2 Y2 ] = LKTrackPyr( img1, img2, X1, Y1 )
 %	Lucas-Kanade Tracker with pyramid and iteration.
 %	img1 and img2 are 2 images of a same scene with little time-lag,
