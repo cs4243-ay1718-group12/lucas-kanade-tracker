@@ -21,7 +21,6 @@ X2 = zeros(length(PIP),imgNum);
 Y2 = zeros(length(PIP),imgNum);
 X2(:,1) = PIP(:,2); %transfer all the extracted X coordinates to X2
 Y2(:,1) = PIP(:,1); %transfer all the extracted Y coordinates to X2
-
 %Both Darren, You can use X2 and Y2 as the starting point for calling your
 %custom LKTracker. 
 figure
@@ -45,9 +44,7 @@ yCentroid = round(mean(Y2));
 plot(xCentroid,yCentroid,'r*');
 
 for p = 2:imgNum
-    [velo_x, velo_y] = LK_Track_Pyramid(imgseq(:,:,p-1),imgseq(:,:,p),X2(:,p-1),Y2(:,p-1),3,12);
-    X2(:,p) = X2(:,p-1) + velo_x; 
-    Y2(:,p) = Y2(:,p-1) + velo_y; 
+    [X2(:,p), Y2(:,p)] = LKTrackPyr(imgseq(:,:,p-1),imgseq(:,:,p),X2(:,p-1),Y2(:,p-1));
 end
  
 figure
