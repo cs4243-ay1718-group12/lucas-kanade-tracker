@@ -3,7 +3,7 @@ close all
 %main file (starting file) to showcase the extraction of harris features
 %based on bounding box
 %% video
-obj = VideoReader('ball_tracker2.mov'); % Change the file name here to load your own video file. 
+obj = VideoReader('C.mov'); % Change the file name here to load your own video file. 
 %Please put the video file in the working directory or add full path.
 
 vid = obj.read;

@@ -4,7 +4,7 @@ function [U, V] = LK_Track_Pyramid_Iterative(raw_img1, raw_img2, X, Y)
     win_rad = 5;
     accuracy_threshold = .01;
     max_iterations = 20;
-    max_levels = Maximum_Pyramid_Level(raw_img1, 64);
+    max_levels = Maximum_Pyramid_Level(raw_img1, 128);
     num_points = size(X,1);
     % Get images for each pyramid levels
     img1_pyramidized = generate_pyramid(raw_img1, max_levels);
@@ -22,7 +22,7 @@ function [U, V] = LK_Track_Pyramid_Iterative(raw_img1, raw_img2, X, Y)
         h = fspecial('sobel');
         img1x = imfilter(img1,h','replicate');
         img1y = imfilter(img1,h,'replicate');
-
+        
         for point = 1 : num_points
             xt = U(point)*2;
             yt = V(point)*2;
@@ -38,7 +38,7 @@ function [U, V] = LK_Track_Pyramid_Iterative(raw_img1, raw_img2, X, Y)
                 [iX, iY, oX, oY, is_out_of_bound] = generate_window(xt, yt, win_rad, num_rows, num_cols);
                 if is_out_of_bound, break; end
                 It = interp2(iX,iY,img2(iY,iX),oX,oY) - I1;
-
+                
                 vel = [Ix(:),Iy(:)]\It(:);
                 xt = xt+vel(1);
                 yt = yt+vel(2);
