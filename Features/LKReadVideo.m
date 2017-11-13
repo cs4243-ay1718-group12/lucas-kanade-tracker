@@ -44,7 +44,9 @@ yCentroid = round(mean(Y2));
 plot(xCentroid,yCentroid,'r*');
 
 for p = 2:imgNum
-    [X2(:,p), Y2(:,p)] = LK_Track_Pyramid_Iterative(imgseq(:,:,p-1),imgseq(:,:,p),X2(:,p-1),Y2(:,p-1));
+    [velo_x, velo_y] = LK_Track_Pyramid_Iterative(imgseq(:,:,p-1),imgseq(:,:,p),X2(:,p-1),Y2(:,p-1));
+    X2(:,p) = X2(:,p-1) + velo_x;
+    Y2(:,p) = Y2(:,p-1) + velo_y;
 end
  
 figure
