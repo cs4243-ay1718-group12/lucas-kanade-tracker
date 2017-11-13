@@ -1,4 +1,4 @@
-function [pyramid] = generate_pyramid(raw_img, max_level)
+function [pyramid] = Generate_Pyramid(raw_img, max_level)
 
 pyramid = cell(1, max_level);
 pyramid{1} = im2double(raw_img);

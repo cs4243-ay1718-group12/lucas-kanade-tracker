@@ -7,8 +7,8 @@ function [velo_x, velo_y] = LK_Track_Pyramid_Iterative(raw_img1, raw_img2, X, Y)
     max_levels = Maximum_Pyramid_Level(raw_img1, 128);
     num_points = size(X,1);
     % Get images for each pyramid levels
-    img1_pyramidized = generate_pyramid(raw_img1, max_levels);
-    img2_pyramidized = generate_pyramid(raw_img2, max_levels);
+    img1_pyramidized = Generate_Pyramid(raw_img1, max_levels);
+    img2_pyramidized = Generate_Pyramid(raw_img2, max_levels);
    
     U = X/2^max_levels;
     V = Y/2^max_levels;
