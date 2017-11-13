@@ -26,7 +26,7 @@ function [velo_x, velo_y] = LK_Track_Pyramid_Iterative(raw_img1, raw_img2, X, Y)
         for point = 1 : num_points
             xt = U(point)*2;
             yt = V(point)*2;
-            [iX, iY, oX, oY, is_out_of_bound] = generate_window(xt, yt, win_rad, num_rows, num_cols);
+            [iX, iY, oX, oY, is_out_of_bound] = Generate_Window(xt, yt, win_rad, num_rows, num_cols);
             if is_out_of_bound 
                 continue; 
             end 
@@ -35,7 +35,7 @@ function [velo_x, velo_y] = LK_Track_Pyramid_Iterative(raw_img1, raw_img2, X, Y)
             I1 = interp2(iX,iY,img1(iY,iX),oX,oY);
 
             for i = 1 : max_iterations
-                [iX, iY, oX, oY, is_out_of_bound] = generate_window(xt, yt, win_rad, num_rows, num_cols);
+                [iX, iY, oX, oY, is_out_of_bound] = Generate_Window(xt, yt, win_rad, num_rows, num_cols);
                 if is_out_of_bound, break; end
                 It = interp2(iX,iY,img2(iY,iX),oX,oY) - I1;
                 

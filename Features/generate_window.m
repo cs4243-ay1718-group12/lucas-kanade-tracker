@@ -1,4 +1,4 @@
-function [cols_range, rows_range, oX, oY, is_out_of_bound] = generate_window(x, y, win_rad, num_rows, num_cols)
+function [cols_range, rows_range, oX, oY, is_out_of_bound] = Generate_Window(x, y, win_rad, num_rows, num_cols)
     % Get window size
     left_bound = x - win_rad;   
     right_bound = x + win_rad;
