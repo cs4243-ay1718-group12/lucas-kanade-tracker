@@ -43,8 +43,8 @@ xCentroid = round(mean(X2));
 yCentroid = round(mean(Y2));
 plot(xCentroid,yCentroid,'r*');
 
-xCentroidArray = zeros(imgNum-1); 
-yCentroidArray = zeros(imgNum-1);
+xCentroidArray = zeros(length(PIP),imgNum); 
+Y2 = zeros(length(PIP),imgNum);
 
 
 for p = 2:imgNum
@@ -58,9 +58,9 @@ figure
 for p = 1:imgNum
     imshow(imgseq(:,:,p)),hold on
     X2p = X2(:,p); Y2p = Y2(:,p); 
-%     xCentroid = round(mean(X2p));
-%     yCentroid = round(mean(Y2p));
-    plot(xCentroidArray(1:p),yCentroidArray(1:p),'r*');
+    xCentroid = round(mean(X2p));
+    yCentroid = round(mean(Y2p));
+    plot(xCentroid,yCentroid,'r*');
 
    %h = plot(X2p,Y2p,'go');
     pause;
