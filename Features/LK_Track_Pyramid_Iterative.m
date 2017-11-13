@@ -53,30 +53,3 @@ function [velo_x, velo_y] = LK_Track_Pyramid_Iterative(raw_img1, raw_img2, X, Y)
     velo_x = median(U-X);
     velo_y = median(V-Y);
 end
-
-function [cols_range, rows_range, oX, oY, is_out_of_bound] = generate_window(x, y, win_rad, num_rows, num_cols)
-    % Get window size
-    left_bound = x - win_rad;   
-    right_bound = x + win_rad;
-    top_bound = y - win_rad;     
-    bottom_bound = y + win_rad;  
-    % x and y can be non-integers because U=X/2^level AND V=Y/2^level
-    fl = floor(left_bound);
-    cr = ceil(right_bound);
-    ft = floor(top_bound);
-    cb = ceil(bottom_bound);
-    
-    % Get the range of cols and rows in the window
-    cols_range = fl:cr;
-    rows_range = ft:cb;
-
-    % Get ... considering using our own method for meshgrid
-    [oX,oY] = meshgrid(left_bound:right_bound,top_bound:bottom_bound);
-    
-    % Check if the window is outside the image
-    if (fl < 1 || ft < 1 || cr > num_cols || cb > num_rows)
-        is_out_of_bound = true;
-    else
-        is_out_of_bound = false;
-    end
-end
