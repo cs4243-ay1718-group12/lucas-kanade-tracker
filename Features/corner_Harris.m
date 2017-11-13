@@ -12,7 +12,8 @@ function [ PIP ] = corner_Harris( frame,ptNum )
 % You can select the number of FPs by changing the variables 
 % max_N & min_N
 
-win_size = 12; % Abitrary, I have no idea what works :)
+win_size = 64; % Abitrary, I have no idea what works :)
+alpha = 8;
 I =double(frame);
 %****************************
 imshow(frame);
@@ -41,7 +42,8 @@ dx = [-1 0 1; -1 0 1; -1 0 1]; % The Mask
     Iy = conv2(I(cmin:cmax,rmin:rmax), dy, 'same');
     %g = fspecial('gaussian',max(1,fix(6*sigma)), sigma); %%%%%% Gaussien Filter
      % Gaussian smoothing + double summation
-    gauss_kern = gausswin(win_size) * gausswin(win_size).';
+    gauss = gaussian(win_size,alpha);
+    gauss_kern = gauss  * gauss.';
     %%%%% 
     Ix2 = conv2(Ix.^2, gauss_kern, 'same');  
     Iy2 = conv2(Iy.^2, gauss_kern, 'same');
