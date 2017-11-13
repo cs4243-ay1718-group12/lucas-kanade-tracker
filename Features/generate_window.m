@@ -13,7 +13,7 @@ function [cols_range, rows_range, oX, oY, is_out_of_bound] = Generate_Window(x, 
     cols_range = min_left:max_right;
     rows_range = min_top:max_bottom;
     % Check if the window is outside the image
-    if (fl < 1 || ft < 1 || cr > num_cols || cb > num_rows)
+    if (min_left < 1 || min_top < 1 || max_right > num_cols || max_bottom > num_rows)
         is_out_of_bound = true;
     else
         is_out_of_bound = false;
