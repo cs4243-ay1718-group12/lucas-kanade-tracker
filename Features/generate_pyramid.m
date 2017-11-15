@@ -1,4 +1,4 @@
-function [pyramid] = Generate_Pyramid(raw_img, max_level)
+function [pyramid] = generate_pyramid(raw_img, max_level)
 
 pyramid = cell(1, max_level);
 pyramid{1} = im2double(raw_img);
@@ -9,6 +9,7 @@ for level = 2 : max_level
     central_weight = .375;
     ker1d = [.25-central_weight/2 .25 central_weight .25 .25-central_weight/2];
     kernel = kron(ker1d,ker1d');
+    
     % Convert image to double for processing
     img = im2double(img);
     result = [];
