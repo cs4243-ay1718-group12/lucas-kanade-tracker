@@ -19,37 +19,50 @@ function [velo_x, velo_y] = LK_Track_Pyramid_Iterative(raw_img1, raw_img2, X, Y)
         img2 = img2_pyramidized{level};
         [num_rows, num_cols] = size(img1);
 
-        h = fspecial('sobel');
-        img1x = imfilter(img1,h','replicate');
-        img1y = imfilter(img1,h,'replicate');
+        % Calculate velocity matrix
+        %{ 
+        Using estimation method, which is not accurate enough
+        img1x = zeros(size(img1,1),size(img1,2));
+        img1y = zeros(size(img1,1),size(img1,2));
+        img1y(1:size(img1,1)-1,:) = - img1(2:size(img1,1),:) + img1(1:size(img1,1)-1,:);
+        img1y(size(img1,1),:) = 0;
+        img1x(:,1:size(img1,2)-1) = - img1(:,2:size(img1,2)) + img1(:,1:size(img1,2)-1);
+        img1x(:,size(img1,2)) = 0;
+        %}
+        % Calculate velocity of img1 using sobel kernel for higher accuracy
+        vertical_velo_kernel = [1 2 1; 0 0 0; -1 -2 -1];
+        img1_velo_x = imfilter(img1,vertical_velo_kernel','circular');
+        img1_velo_y = imfilter(img1,vertical_velo_kernel,'circular');
         
         for point = 1 : num_points
-            xt = U(point)*2;
-            yt = V(point)*2;
-            [iX, iY, oX, oY, is_out_of_bound] = generate_window(xt, yt, win_rad, num_rows, num_cols);
+            level_x = U(point)*2;
+            level_y = V(point)*2;
+            [cols_range, rows_range, query_points_x, query_points_y, is_out_of_bound] = generate_window(level_x, level_y, win_rad, num_rows, num_cols);
             if is_out_of_bound 
                 continue; 
             end 
-            Ix = interp2(iX,iY,img1x(iY,iX),oX,oY);
-            Iy = interp2(iX,iY,img1y(iY,iX),oX,oY);
-            I1 = interp2(iX,iY,img1(iY,iX),oX,oY);
-
+            I_x = interp2(cols_range,rows_range,img1_velo_x(rows_range,cols_range),query_points_x,query_points_y);
+            I_y = interp2(cols_range,rows_range,img1_velo_y(rows_range,cols_range),query_points_x,query_points_y);
+            I_d = interp2(cols_range,rows_range,img1(rows_range,cols_range),query_points_x,query_points_y);
+            % Iterative improvement for an abitrary number of steps or
+            % until error is smaller than accuracy_threshold
             for i = 1 : max_iterations
-                [iX, iY, oX, oY, is_out_of_bound] = generate_window(xt, yt, win_rad, num_rows, num_cols);
+                [cols_range, rows_range, query_points_x, query_points_y, is_out_of_bound] = generate_window(level_x, level_y, win_rad, num_rows, num_cols);
                 if is_out_of_bound, break; end
-                It = interp2(iX,iY,img2(iY,iX),oX,oY) - I1;
-                
-                vel = [Ix(:),Iy(:)]\It(:);
-                xt = xt+vel(1);
-                yt = yt+vel(2);
-                if max(abs(vel)) < accuracy_threshold
+                I_t = interp2(cols_range,rows_range,img2(rows_range,cols_range),query_points_x,query_points_y) - I_d;
+                % Calculate the current estimate
+                current_estimate = [I_x(:),I_y(:)]\I_t(:);
+                level_x = level_x + current_estimate(1);
+                level_y = level_y + current_estimate(2);
+                if max(abs(current_estimate)) < accuracy_threshold
                     break; 
                 end
             end
-            U(point) = xt;
-            V(point) = yt;
+            U(point) = level_x;
+            V(point) = level_y;
         end
     end
+    % Get only one velocity to maintain group structure
     velo_x = median(U-X);
     velo_y = median(V-Y);
 end
