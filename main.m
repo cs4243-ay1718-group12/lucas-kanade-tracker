@@ -47,7 +47,7 @@ end
 
 for p = 2:imgNum
     % get displacement between the p and (p-1)th frames of the video
-    [dx, dy] = LK_Track_Pyramid_Iterative(imgseq(:,:,p-1), imgseq(:,:,p), X(:,p-1), Y(:,p-1), LK_WIN_RADIUS, LK_ACCURACY, LK_MAX_ITER);
+    [dx, dy] = lk_pyramidal_track(imgseq(:,:,p-1), imgseq(:,:,p), X(:,p-1), Y(:,p-1), LK_WIN_RADIUS, LK_ACCURACY, LK_MAX_ITER);
     X(:, p) = X(:, p-1) + dx;
     Y(:, p) = Y(:, p-1) + dy;
 end
