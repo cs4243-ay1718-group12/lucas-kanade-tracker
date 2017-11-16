@@ -1,5 +1,5 @@
 function [dx, dy] = LK_Track_Pyramid_Iterative(raw_img1, raw_img2, X, Y, win_rad, accuracy_threshold, max_iterations)
-    max_levels = Maximum_Pyramid_Level(raw_img1, 128);
+    max_levels = get_max_pyramid_level(raw_img1, 128);
     num_points = size(X,1);
     
     % Get images for each pyramid levels

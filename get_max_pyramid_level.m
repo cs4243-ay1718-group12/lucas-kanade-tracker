@@ -1,4 +1,4 @@
-function [ max_levels ] = Maximum_Pyramid_Level(raw_img, min_dimension)
+function [ max_levels ] = get_max_pyramid_level(raw_img, min_dimension)
 % raw_img: input image unaltered
 % min_dimension: smallest dimension of reduced image allowed to avoid loss
 % of details
