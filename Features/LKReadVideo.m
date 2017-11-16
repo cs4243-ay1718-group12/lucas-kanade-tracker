@@ -2,7 +2,7 @@ clear
 close all
 %main file (starting file) to showcase the extraction of harris features
 %based on bounding box
-%% video
+
 obj = VideoReader('C.mov'); % Change the file name here to load your own video file. 
 %Please put the video file in the working directory or add full path.
 
@@ -44,7 +44,7 @@ yCentroid = round(mean(Y2));
 plot(xCentroid,yCentroid,'r*');
 
 for p = 2:imgNum
-    [velo_x, velo_y] = LK_Track_Pyramid_Iterative(imgseq(:,:,p-1),imgseq(:,:,p),X2(:,p-1),Y2(:,p-1));
+    [velo_x, velo_y] = LK_Track_Pyramid_Iterative(imgseq(:,:,p-1),imgseq(:,:,p),X2(:,p-1),Y2(:,p-1), 5, 0.01, 20);
     X2(:,p) = X2(:,p-1) + velo_x;
     Y2(:,p) = Y2(:,p-1) + velo_y;
 end
@@ -54,7 +54,7 @@ for p = 1:imgNum
     imshow(imgseq(:,:,p)),hold on
     X2p = X2(:,p); Y2p = Y2(:,p);
     h = plot(X2p,Y2p,'go');
-    pause;
+    pause(0.05);
     X2pl = X2p; Y2pl = Y2p;
 end
 
