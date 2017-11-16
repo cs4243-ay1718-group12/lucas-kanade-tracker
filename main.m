@@ -5,6 +5,7 @@ close all
 IO_FILENAME = 'C.mov';
 CORNER_NUM = 10;
 CORNER_FILTER_SIZE = 13;
+CORNER_MIN_QUALITY = 0.02; % default is 0.01, must be in [0, 1]
 LK_WIN_RADIUS = 5;
 LK_ACCURACY = 0.01;
 LK_MAX_ITER = 20;
@@ -23,7 +24,7 @@ end
 
 % get corner coordinates
 [xmin, ymin, xmax, ymax, w, h] = poll_area_of_interest(imgseq(:, :, 1));
-detector = detectMinEigenFeatures(imgseq(:, :, 1), 'FilterSize', CORNER_FILTER_SIZE, 'ROI', [xmin, ymax, w, h]);
+detector = detectMinEigenFeatures(imgseq(:, :, 1), 'FilterSize', CORNER_FILTER_SIZE, 'ROI', [xmin, ymax, w, h], 'MinQuality', CORNER_MIN_QUALITY);
 corners = double(detector.selectStrongest(CORNER_NUM).Location);
 
 % separate X and Y components of corner coordinate

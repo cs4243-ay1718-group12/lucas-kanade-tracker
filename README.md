@@ -9,6 +9,7 @@ For NUS module CS4232 by: Darren, Le Minh Duc, Regine, Rohit
     - `IO_FILENAME` the path to the target video file
     - `CORNER_NUM` number of corners to look for in the area of interest (impacts performance)
     - `CORNER_FILTER_SIZE` size of the Gaussian window in corner discovery
+    - `CORNER_MIN_QUALITY` minimum quality of corner; in range [0, 1]; `default 0.01`
     - `LK_WIN_RADIUS`
     - `LK_ACCURACY`
     - `LK_MAX_ITER`
