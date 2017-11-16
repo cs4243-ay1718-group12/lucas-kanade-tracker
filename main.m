@@ -2,14 +2,15 @@ clear
 close all
 
 % PARAMETERS
-IO_FILENAME = 'C.mov';
+IO_FILENAME = 'wall_c.mov';
+CORNER_TYPE = 'harris';
 CORNER_NUM = 10;
 CORNER_FILTER_SIZE = 13;
-CORNER_MIN_QUALITY = 0.02; % default is 0.01, must be in [0, 1]
+CORNER_MIN_QUALITY = 0.04; % default is 0.01, must be in [0, 1]
 LK_WIN_RADIUS = 5;
 LK_ACCURACY = 0.01;
 LK_MAX_ITER = 20;
-PLOT_INITIAL = false;
+PLOT_INITIAL = true;
 
 obj = VideoReader(IO_FILENAME); % Change the file name here to load your own video file. 
 
@@ -24,7 +25,11 @@ end
 
 % get corner coordinates
 [xmin, ymin, xmax, ymax, w, h] = poll_area_of_interest(imgseq(:, :, 1));
-detector = detectMinEigenFeatures(imgseq(:, :, 1), 'FilterSize', CORNER_FILTER_SIZE, 'ROI', [xmin, ymax, w, h], 'MinQuality', CORNER_MIN_QUALITY);
+if strcmp(CORNER_TYPE, 'harris')
+    detector = detectHarrisFeatures(imgseq(:, :, 1), 'FilterSize', CORNER_FILTER_SIZE, 'ROI', [xmin, ymax, w, h], 'MinQuality', CORNER_MIN_QUALITY);
+else
+    detector = detectMinEigenFeatures(imgseq(:, :, 1), 'FilterSize', CORNER_FILTER_SIZE, 'ROI', [xmin, ymax, w, h], 'MinQuality', CORNER_MIN_QUALITY);
+end
 corners = double(detector.selectStrongest(CORNER_NUM).Location);
 
 % separate X and Y components of corner coordinate
@@ -37,11 +42,10 @@ if PLOT_INITIAL
     % plot initial corners
     figure;
     imshow(imgseq(:, :, 1)), hold on;
-    plot(X(:, 1), Y(:, 2), '*')
 
     % draw a bounding box to encompass all the corners
     rectangle('Position', get_bounding_rect(X(:, 1), Y(:, 1))) %comment to hide the bounding box
-
+    plot(X(:, 1), Y(:, 1), '*');
     % calculate the centoid of a rectangle. We will use this centroid to do air writing.
     plot(round(mean(X(:, 1))), round(mean(Y(:, 1))), 'r*');
 end

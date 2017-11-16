@@ -7,6 +7,7 @@ For NUS module CS4232 by: Darren, Le Minh Duc, Regine, Rohit
 1. Open `main.m` in Matlab.
 2. Modify parameters as necessary:
     - `IO_FILENAME` the path to the target video file
+    - `CORNER_TYPE` corner detector algorithim to use: `'harris'` or `'mineigen'`
     - `CORNER_NUM` number of corners to look for in the area of interest (impacts performance)
     - `CORNER_FILTER_SIZE` size of the Gaussian window in corner discovery
     - `CORNER_MIN_QUALITY` minimum quality of corner; in range [0, 1]; `default 0.01`
