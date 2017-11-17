@@ -2,7 +2,7 @@ clear
 close all
 
 % PARAMETERS
-IO_FILENAME = 'C.mov';
+IO_FILENAME = 'cc.mov';
 CORNER_TYPE = 'custom_harris';
 CORNER_NUM = 10;
 CORNER_FILTER_SIZE = 13;
