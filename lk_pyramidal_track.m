@@ -7,25 +7,15 @@ function [dx, dy] = lk_pyramidal_track(raw_img1, raw_img2, X, Y, win_rad, accura
     img2_pyramidized = generate_pyramid(raw_img2, max_levels);
    
     % begin with most downsampled level
-    U = X/2^max_levels;
-    V = Y/2^max_levels;
+    U = double(X)/double(2^max_levels);
+    V = double(Y)/double(2^max_levels);
 
     for level = max_levels:-1:1
         % Get image for this level
         img1 = img1_pyramidized{level};
         img2 = img2_pyramidized{level};
         [num_rows, num_cols] = size(img1);
-
-        % Calculate velocity matrix
-        %{ 
-        Using estimation method, which is not accurate enough
-        img1x = zeros(size(img1,1),size(img1,2));
-        img1y = zeros(size(img1,1),size(img1,2));
-        img1y(1:size(img1,1)-1,:) = - img1(2:size(img1,1),:) + img1(1:size(img1,1)-1,:);
-        img1y(size(img1,1),:) = 0;
-        img1x(:,1:size(img1,2)-1) = - img1(:,2:size(img1,2)) + img1(:,1:size(img1,2)-1);
-        img1x(:,size(img1,2)) = 0;
-        %}
+        
         % Calculate velocity of img1 using sobel kernel for higher accuracy
         vertical_velo_kernel = [1 2 1; 0 0 0; -1 -2 -1];
         I_x = imfilter(img1,vertical_velo_kernel','circular');
@@ -53,10 +43,10 @@ function [dx, dy] = lk_pyramidal_track(raw_img1, raw_img2, X, Y, win_rad, accura
                 continue;
             end
             G = [W_xx(level_x,level_y) W_xy(level_x, level_y); W_xy(level_x, level_y) W_yy(level_x, level_y)];
-            b = [W_t(level_x, level_y).*W_x(level_x, level_y); W_t(level_x, level_y).*W_y(level_x, level_y)];
+            b = [W_t(level_x, level_y)*W_x(level_x, level_y); W_t(level_x, level_y)*W_y(level_x, level_y)];
             velo = G\b;
-            U(point) = level_x + velo(1);
-            V(point) = level_y + velo(2);
+            U(point) = double(level_x) + velo(1);
+            V(point) = double(level_y) + velo(2);
         end
     end
     % Get only one velocity to maintain group structure
