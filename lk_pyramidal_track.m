@@ -44,7 +44,7 @@ function [dx, dy] = lk_pyramidal_track(raw_img1, raw_img2, X, Y, win_rad, accura
             if is_out_of_bound 
                 continue; 
             end
-            win_img = img1(rows_range, cols_range);
+            win_img_1 = img1(rows_range, cols_range);
             % Get the same window on velocity matrices
             % Note: concept of row, column and vertical, horizontal movements are reversed
             win_velo_x = img1_velo_x(rows_range, cols_range);
@@ -55,20 +55,23 @@ function [dx, dy] = lk_pyramidal_track(raw_img1, raw_img2, X, Y, win_rad, accura
             [query_points_x, query_points_y] = get_query_points(level_x, level_y, win_rad);
             I_x = interp2(cols_range, rows_range, win_velo_x, query_points_x,query_points_y);
             I_y = interp2(cols_range, rows_range, win_velo_y, query_points_x,query_points_y);
-            I_d = interp2(cols_range, rows_range, win_img, query_points_x,query_points_y);
+            I_1 = interp2(cols_range, rows_range, win_img_1, query_points_x,query_points_y);
             % Iterative improvement for an abitrary number of steps or
             % until error is smaller than accuracy_threshold
             for i = 1 : max_iterations
+                % Get window based on new estimate
                 [cols_range, rows_range, is_out_of_bound] = generate_window(level_x, level_y, win_rad, num_rows, num_cols);
                 if is_out_of_bound
                     break; 
                 end
-                % Recalculate the image difference by taking the difference
-                % between the original x,y on img1 and the current estimate
-                % of x,y on img2
-                % Theoretical explanation here: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.185.585&rep=rep1&type=pdf
+                win_img_2 = img2(rows_range, cols_range);
+                % Get new query points based of latest estimate
                 [query_points_x, query_points_y] = get_query_points(level_x, level_y, win_rad);
-                I_t = interp2(cols_range,rows_range,img2(rows_range,cols_range),query_points_x,query_points_y) - I_d;
+                % Recalculate the image difference by taking the difference
+                % between the original x,y on img1 and the current estimate % of x,y on img2
+                % Theoretical explanation here: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.185.585&rep=rep1&type=pdf
+                I_2 = interp2(cols_range,rows_range,win_img_2,query_points_x,query_points_y);
+                I_t = I_2 - I_1;
                 % Calculate the current estimate
                 current_estimate = [I_x(:), I_y(:)] \ I_t(:);
                 level_x = level_x + current_estimate(1);
