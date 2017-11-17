@@ -3,7 +3,7 @@ close all
 
 % PARAMETERS
 IO_FILENAME = 'wall_c.mov';
-CORNER_TYPE = 'harris';
+CORNER_TYPE = 'custom_harris';
 CORNER_NUM = 10;
 CORNER_FILTER_SIZE = 13;
 CORNER_MIN_QUALITY = 0.04; % default is 0.01, must be in [0, 1]
@@ -27,11 +27,14 @@ end
 [xmin, ymin, xmax, ymax, w, h] = poll_area_of_interest(imgseq(:, :, 1));
 if strcmp(CORNER_TYPE, 'harris')
     detector = detectHarrisFeatures(imgseq(:, :, 1), 'FilterSize', CORNER_FILTER_SIZE, 'ROI', [xmin, ymax, w, h], 'MinQuality', CORNER_MIN_QUALITY);
-else
+    corners = double(detector.selectStrongest(CORNER_NUM).Location);
+elseif strcmp(CORNER_TYPE, 'custom_harris')
+    detector = detectCustomHarrisFeatures(imgseq(:, :, 1),CORNER_NUM, xmin, ymin, xmax, ymax,CORNER_MIN_QUALITY); 
+    corners = detector;
+else        
     detector = detectMinEigenFeatures(imgseq(:, :, 1), 'FilterSize', CORNER_FILTER_SIZE, 'ROI', [xmin, ymax, w, h], 'MinQuality', CORNER_MIN_QUALITY);
+    corners = double(detector.selectStrongest(CORNER_NUM).Location);
 end
-corners = double(detector.selectStrongest(CORNER_NUM).Location);
-
 % separate X and Y components of corner coordinate
 X = zeros(length(corners), imgNum);
 Y = zeros(length(corners), imgNum);
