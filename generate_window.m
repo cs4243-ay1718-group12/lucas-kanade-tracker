@@ -1,4 +1,4 @@
-function [cols_range, rows_range, query_points_X, query_points_y, is_out_of_bound] = Generate_Window(x, y, win_rad, num_rows, num_cols)
+function [cols_range, rows_range, is_out_of_bound] = Generate_Window(x, y, win_rad, num_rows, num_cols)
     % Get window size
     left_bound = x - win_rad;   
     right_bound = x + win_rad;
@@ -18,6 +18,4 @@ function [cols_range, rows_range, query_points_X, query_points_y, is_out_of_boun
     else
         is_out_of_bound = false;
     end
-    % Get query points for interpolations
-    [query_points_X,query_points_y] = meshgrid(left_bound:right_bound,top_bound:bottom_bound);
 end

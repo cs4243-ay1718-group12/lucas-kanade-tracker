@@ -27,9 +27,10 @@ function [dx, dy] = lk_pyramidal_track(raw_img1, raw_img2, X, Y, win_rad, accura
         img1x(:,size(img1,2)) = 0;
         %}
         % Calculate velocity of img1 using sobel kernel for higher accuracy
-        kernel_x = [1 2 1; 0 0 0; -1 -2 -1];
-        img1_velo_x = imfilter(img1, kernel_x', 'circular');
-        img1_velo_y = imfilter(img1, kernel_x, 'circular');
+        kernel_y = [1 2 1; 0 0 0; -1 -2 -1];
+        kernel_x = [1 0 -1; 2 0 -2; 1 0 -1;];
+        img1_velo_x = imfilter(img1, kernel_x, 'circular');
+        img1_velo_y = imfilter(img1, kernel_y, 'circular');
         
         for point = 1 : num_points
             % Get x y for this level by scaling by 2
@@ -37,26 +38,30 @@ function [dx, dy] = lk_pyramidal_track(raw_img1, raw_img2, X, Y, win_rad, accura
             level_y = V(point)*2;
             
             % see if we should skip feature
-            [cols_range, rows_range, query_points_x, query_points_y, is_out_of_bound] = generate_window(level_x, level_y, win_rad, num_rows, num_cols);
+            [cols_range, rows_range, is_out_of_bound] = generate_window(level_x, level_y, win_rad, num_rows, num_cols);
             if is_out_of_bound 
                 continue; 
             end 
+            [query_points_x, query_points_y] = get_query_points(level_x, level_y, win_rad);
+            % Calculate the directional derivatives
+            % Using interpolation method as seen: https://www.mathworks.com/matlabcentral/fileexchange/30822-lucas-kanade-tracker-with-pyramid-and-iteration
             I_x = interp2(cols_range, rows_range, img1_velo_x(rows_range, cols_range), query_points_x,query_points_y);
             I_y = interp2(cols_range, rows_range, img1_velo_y(rows_range, cols_range), query_points_x,query_points_y);
             I_d = interp2(cols_range, rows_range, img1(rows_range, cols_range), query_points_x,query_points_y);
             % Iterative improvement for an abitrary number of steps or
             % until error is smaller than accuracy_threshold
             for i = 1 : max_iterations
-                [cols_range, rows_range, query_points_x, query_points_y, is_out_of_bound] = generate_window(level_x, level_y, win_rad, num_rows, num_cols);
-                if is_out_of_bound, break; end
-                
+                [cols_range, rows_range, is_out_of_bound] = generate_window(level_x, level_y, win_rad, num_rows, num_cols);
+                if is_out_of_bound
+                    break; 
+                end
+                [query_points_x, query_points_y] = get_query_points(level_x, level_y, win_rad);
                 I_t = interp2(cols_range,rows_range,img2(rows_range,cols_range),query_points_x,query_points_y) - I_d;
-                
                 % Calculate the current estimate
                 current_estimate = [I_x(:), I_y(:)] \ I_t(:);
                 level_x = level_x + current_estimate(1);
                 level_y = level_y + current_estimate(2);
-                
+                % Check current estimate against accuracy threshold
                 if max(abs(current_estimate)) < accuracy_threshold
                     break; 
                 end
