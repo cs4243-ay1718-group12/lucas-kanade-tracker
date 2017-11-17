@@ -2,12 +2,12 @@ clear
 close all
 
 % PARAMETERS
-ROOT_NAME = 'C';
-IO_FILENAME = strcat(ROOT_NAME,'.mp4');
+ROOT_NAME = 's7';
+IO_FILENAME = strcat(ROOT_NAME,'.mov');
 CORNER_TYPE = 'custom_harris';
 CORNER_NUM = 10;
 CORNER_FILTER_SIZE = 13;
-CORNER_MIN_QUALITY = 0.04; % default is 0.01, must be in [0, 1]
+CORNER_MIN_QUALITY = 0.01; % default is 0.01, must be in [0, 1]
 LK_WIN_RADIUS = 5;
 LK_ACCURACY = 0.01;
 LK_MAX_ITER = 20;

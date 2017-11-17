@@ -1,5 +1,5 @@
 function readTextFileAndDraw(file_name) 
-    IO_FILENAME = strcat(file_name,'.mp4');
+    IO_FILENAME = strcat(file_name,'.mov');
     obj = VideoReader(IO_FILENAME); % Change the file name here to load your own video file. 
     vid = obj.read;
     [M N C imgNum] = size(vid);
