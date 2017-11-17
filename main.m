@@ -2,7 +2,7 @@ clear
 close all
 
 % PARAMETERS
-IO_FILENAME = 'C.mov';
+IO_FILENAME = '20171117_151425.mp4';
 CORNER_TYPE = 'custom_harris';
 CORNER_NUM = 10;
 CORNER_FILTER_SIZE = 13;
@@ -58,14 +58,36 @@ for p = 2:imgNum
     [dx, dy] = lk_pyramidal_track(imgseq(:,:,p-1), imgseq(:,:,p), X(:,p-1), Y(:,p-1), LK_WIN_RADIUS, LK_ACCURACY, LK_MAX_ITER);
     X(:, p) = X(:, p-1) + dx;
     Y(:, p) = Y(:, p-1) + dy;
+    xCentroidArray(p-1) = round(mean(X(:, p)));
+    yCentroidArray(p-1) = round(mean(Y(:, p)));
 end
  
 figure
+% B = imread('emoji_glass.png');
+% B = rgb2gray(B);
+% C = imread('glasses.png');
+% C = rgb2gray(C);
 for p = 1:imgNum
-    imshow(imgseq(:,:,p)), hold on
-    plot(X(:, p), Y(:, p), 'go'); % tracked points
-    plot(round(mean(X(:, p))), round(mean(Y(:, p))), 'r*'); % centroid of tracked points
-    rectangle('Position', get_bounding_rect(X(:, p), Y(:, p))) % bounding box of tracked points
+    A = imgseq(:,:,p);
+    %imshow(imgseq(:,:,p)), hold on
+    xCentroid = round(mean(X(:, p)));
+    yCentroid = round(mean(Y(:, p)));
+    use_X=yCentroid - 80 ;
+    use_Y=xCentroid - 120;
+%     if p>20
+%         A((1:size(C,1))+use_X,(1:size(C,2))+use_Y,:) = C;
+%     end
+%     if p>60
+%         A((1:size(B,1))+use_X,(1:size(B,2))+use_Y,:) = B;
+%     end
+%     if p>90
+%         A((1:size(C,1))+use_X,(1:size(C,2))+use_Y,:) = C;
+%     end
+        imshow(A),hold on    
+    %plot(X(:, p), Y(:, p), 'go'); % tracked points
+    plot(round(mean(X(:, p))), round(mean(Y(:, p))), 'g*'); % centroid of tracked points
+    plot(xCentroidArray(1:p),yCentroidArray(1:p),'r*');
+    %rectangle('Position', get_bounding_rect(X(:, p), Y(:, p))) % bounding box of tracked points
     pause(0.05);
 end
 
