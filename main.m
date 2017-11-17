@@ -2,7 +2,7 @@ clear
 close all
 
 % PARAMETERS
-ROOT_NAME = 's7';
+ROOT_NAME = 's';
 IO_FILENAME = strcat(ROOT_NAME,'.mov');
 CORNER_TYPE = 'custom_harris';
 CORNER_NUM = 10;
@@ -66,7 +66,4 @@ for p = 2:imgNum
     yCentroidArray(p-1) = round(mean(Y(:, p)));
     fprintf(fileID,'%d , %d\n', round(mean(X(:, p))),round(mean(Y(:, p))));
 end
-fclose(fileID);
- 
-readTextFileAndDraw(ROOT_NAME);
- 
+fclose(fileID); 
