@@ -1,7 +1,7 @@
 clear
 close all
 
-IO_FILENAME = '4.mp4'; 
+IO_FILENAME = 'assets/submission-video/s.mp4'; 
 obj = VideoReader(IO_FILENAME); % Change the file name here to load your own video file. 
 vid = obj.read;
 [M N C imgNum] = size(vid);
@@ -12,14 +12,19 @@ for p = 1:imgNum
 end
 clear vid obj;
 
-File =  '4.txt'; %% hange this to load centroid file name related to the video above
+File =  'assets/submission-video/s.txt'; %% hange this to load centroid file name related to the video above
 f = fopen(File, 'r');
 C = textscan(f, '%f%f', 'Delimiter', ',');
 xCentroidArray = C{1};
 yCentroidArray = C{2};
 fclose(f);
+
+img_prefix = 'assets/';
+img_repo = {'glasses.png','emoji.png'};
+img_index = floor(rand()) + 1;
+
 figure
-C = imread('glasses.png');
+C = imread(strcat(img_prefix,img_repo{img_index}));
 
 %815 202 933 168
 
