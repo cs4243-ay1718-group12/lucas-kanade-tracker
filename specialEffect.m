@@ -18,6 +18,11 @@ C = textscan(f, '%f%f', 'Delimiter', ',');
 xCentroidArray = C{1};
 yCentroidArray = C{2};
 fclose(f);
+
+img_prefix = 'assets/';
+img_repo = {'glasses.png','emoji.png'};
+img_index = floor(rand()) + 1;
+
 figure
 C = imread('assets/glasses.png');
 
