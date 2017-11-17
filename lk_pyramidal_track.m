@@ -32,6 +32,7 @@ function [dx, dy] = lk_pyramidal_track(raw_img1, raw_img2, X, Y, win_rad, accura
         img1_velo_y = imfilter(img1, kernel_x, 'circular');
         
         for point = 1 : num_points
+            % Get x y for this level by scaling by 2
             level_x = U(point)*2;
             level_y = V(point)*2;
             
