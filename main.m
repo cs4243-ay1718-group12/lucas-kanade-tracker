@@ -2,7 +2,7 @@ clear
 close all
 
 % PARAMETERS
-IO_FILENAME = 'wall_c.mov';
+IO_FILENAME = 'C.mov';
 CORNER_TYPE = 'custom_harris';
 CORNER_NUM = 10;
 CORNER_FILTER_SIZE = 13;
@@ -29,7 +29,7 @@ if strcmp(CORNER_TYPE, 'harris')
     detector = detectHarrisFeatures(imgseq(:, :, 1), 'FilterSize', CORNER_FILTER_SIZE, 'ROI', [xmin, ymax, w, h], 'MinQuality', CORNER_MIN_QUALITY);
     corners = double(detector.selectStrongest(CORNER_NUM).Location);
 elseif strcmp(CORNER_TYPE, 'custom_harris')
-    detector = detectCustomHarrisFeatures(imgseq(:, :, 1),CORNER_NUM, xmin, ymin, xmax, ymax,CORNER_MIN_QUALITY); 
+    detector = detectCustomHarrisFeatures(imgseq(:, :, 1), CORNER_NUM, xmin, ymin, xmax, ymax, CORNER_MIN_QUALITY); 
     corners = detector;
 else        
     detector = detectMinEigenFeatures(imgseq(:, :, 1), 'FilterSize', CORNER_FILTER_SIZE, 'ROI', [xmin, ymax, w, h], 'MinQuality', CORNER_MIN_QUALITY);
