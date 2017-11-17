@@ -16,12 +16,15 @@ obj = VideoReader(IO_FILENAME); % Change the file name here to load your own vid
 
 vid = obj.read;
 [M N C imgNum] = size(vid);
-imgseq = zeros(M,N,imgNum); 
+color_imgseq = zeros(M, N, C, imgNum);
+imgseq = zeros(M, N, imgNum);
 for p = 1:imgNum
 	img1 = im2double(vid(:,:,:,p));
+    color_imgseq(:, :, :, p) = img1;
 	if C == 3, img1 = rgb2gray(img1); end
 	imgseq(:,:,p) = img1; 
 end
+clear vid obj;
 
 % get corner coordinates
 [xmin, ymin, xmax, ymax, w, h] = poll_area_of_interest(imgseq(:, :, 1));
@@ -57,9 +60,10 @@ for p = 2:imgNum
     Y(:, p) = Y(:, p-1) + dy;
 end
  
+clear imgseq;
 figure
 for p = 1:imgNum
-    imshow(imgseq(:,:,p)), hold on
+    imshow(color_imgseq(:, :, :, p)), hold on
     plot(X(:, p), Y(:, p), 'go'); % tracked points
     plot(round(mean(X(:, p))), round(mean(Y(:, p))), 'r*'); % centroid of tracked points
     rectangle('Position', get_bounding_rect(X(:, p), Y(:, p))) % bounding box of tracked points
